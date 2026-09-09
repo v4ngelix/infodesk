@@ -3,6 +3,7 @@ spring:
     name: infodesk
   ai:
     model:
+      chat: none
       audio:
         speech: none
         transcription: none
