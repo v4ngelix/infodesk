@@ -1,0 +1,7 @@
+# Temperature 0 keeps the real model as deterministic as the API allows.
+spring:
+  ai:
+    openai:
+      chat:
+        options:
+          temperature: 0

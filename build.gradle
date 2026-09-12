@@ -41,10 +41,16 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+tasks.withType(Test).configureEach {
+	testLogging {
+		events 'passed', 'skipped', 'failed'
+		exceptionFormat = 'full'
+		showStandardStreams = false
+	}
+}
+
 sourceSets {
 	integrationTest {
-		java.srcDir 'src/integrationTest/java'
-		resources.srcDir 'src/integrationTest/resources'
 		compileClasspath += sourceSets.main.output + sourceSets.test.output.classesDirs
 		runtimeClasspath += sourceSets.main.output + sourceSets.test.output.classesDirs
 	}
@@ -68,6 +74,7 @@ tasks.register('integrationTest', Test) {
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
 	classpath = sourceSets.integrationTest.runtimeClasspath
 	useJUnitPlatform()
+	systemProperty 'spring.profiles.active', 'integrationtest'
 	reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/integrationTest')
 	reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/integrationTest')
 	shouldRunAfter tasks.named('test')
