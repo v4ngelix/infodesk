@@ -39,3 +39,36 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+sourceSets {
+	integrationTest {
+		java.srcDir 'src/integrationTest/java'
+		resources.srcDir 'src/integrationTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+	}
+}
+
+configurations {
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs integration tests against the real OpenAI API. Requires OPENAI_API_KEY.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	useJUnitPlatform()
+	reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/integrationTest')
+	reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/integrationTest')
+	shouldRunAfter tasks.named('test')
+
+	def apiKey = providers.environmentVariable('OPENAI_API_KEY')
+	environment 'OPENAI_API_KEY', apiKey.getOrElse('')
+	doFirst {
+		if (!apiKey.isPresent() || apiKey.get().isBlank()) {
+			throw new GradleException('OPENAI_API_KEY is not set. Integration tests call the real OpenAI API; export the key or run `./gradlew test` for unit tests only.')
+		}
+	}
+}
