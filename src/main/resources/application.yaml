@@ -1,11 +1,18 @@
 spring:
-  application:
-    name: infodesk
   ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      chat:
+        options:
+          model: ${OPENAI_MODEL:gpt-4.1-mini}
+          temperature: 0.1
     model:
-      audio:
-        speech: none
-        transcription: none
+      audio.speech: none
+      audio.transcription: none
       image: none
       embedding: none
       moderation: none
+infodesk:
+  max-question-length: 2000
+  rate-limit:
+    requests-per-minute: 10
