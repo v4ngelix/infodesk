@@ -7,9 +7,8 @@ spring:
     openai:
       api-key: ${OPENAI_API_KEY:}
       chat:
-        options:
-          model: ${OPENAI_MODEL:gpt-4.1-mini}
-          temperature: 0.1
+        model: ${OPENAI_MODEL:gpt-4.1-mini}
+        temperature: 0.1
     model:
       audio.speech: none
       audio.transcription: none
