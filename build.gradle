@@ -51,8 +51,8 @@ tasks.withType(Test).configureEach {
 
 sourceSets {
 	integrationTest {
-		compileClasspath += sourceSets.main.output + sourceSets.test.output.classesDirs
-		runtimeClasspath += sourceSets.main.output + sourceSets.test.output.classesDirs
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
 	}
 }
 
