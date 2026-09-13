@@ -4,3 +4,6 @@ spring:
       chat: none
     openai:
       api-key: test-key-not-used
+infodesk:
+  rate-limit:
+    requests-per-minute: 1000
