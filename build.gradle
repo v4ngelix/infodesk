@@ -78,17 +78,4 @@ tasks.register('integrationTest', Test) {
 	reports.html.outputLocation = layout.buildDirectory.dir('reports/tests/integrationTest')
 	reports.junitXml.outputLocation = layout.buildDirectory.dir('test-results/integrationTest')
 	shouldRunAfter tasks.named('test')
-
-	def envKey = providers.environmentVariable('OPENAI_API_KEY')
-	def dotEnv = providers.fileContents(layout.projectDirectory.file('.env')).asText
-	doFirst {
-		def fromEnv = envKey.getOrElse('').strip()
-		def fromFile = dotEnv.getOrElse('').readLines()
-				.findAll { it.startsWith('OPENAI_API_KEY=') }
-				.collect { it.substring('OPENAI_API_KEY='.length()).strip() }
-				.find { !it.isBlank() && it != 'sk-...' } ?: ''
-		if (fromEnv.isBlank() && fromFile.isBlank()) {
-			throw new GradleException('No OPENAI_API_KEY found in the environment or in .env. Integration tests call the real OpenAI API; set the key or run `./gradlew test` for unit tests only.')
-		}
-	}
 }
