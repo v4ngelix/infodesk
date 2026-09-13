@@ -22,7 +22,7 @@ class OpenAiConnectivityIT {
 	@Value("${spring.ai.openai.api-key:}")
 	String apiKey;
 
-	@Value("${spring.ai.openai.chat.options.model:}")
+	@Value("${spring.ai.openai.chat.model:}")
 	String model;
 
 	@Test
