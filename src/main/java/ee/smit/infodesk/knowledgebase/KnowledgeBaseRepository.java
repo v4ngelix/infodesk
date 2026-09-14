@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +34,17 @@ public class KnowledgeBaseRepository {
 
 	private static final int MAX_EXCERPT_LENGTH = 400;
 
-	private static final int MIN_TOKEN_LENGTH = 3;
+	private static final int MIN_TOKEN_LENGTH = 2;
+
+	/** Query tokens shorter than this must match a document token exactly instead of as a prefix. */
+	private static final int MIN_PREFIX_MATCH_LENGTH = 3;
+
+	/**
+	 * The only two-letter query words that are searched (IT acronyms). Everything else that short is filler
+	 * ("ja", "on") and would match nearly every document. Extend when the knowledge base gains new acronyms.
+	 */
+	private static final Set<String> TWO_LETTER_WHITELIST = Set.of("ci", "cd", "mr", "pr", "qa", "ui", "db", "vm", "ip",
+			"os", "ad");
 
 	private static final Pattern NON_LETTERS = Pattern.compile("[^\\p{L}]+");
 
@@ -58,10 +69,11 @@ public class KnowledgeBaseRepository {
 	/**
 	 * Keyword search. A query token matches a document token that starts with it, so base forms
 	 * match Estonian inflections ("ligipääs" → "ligipääsu"). Score is the number of distinct query
-	 * tokens found in the best section; ties go to the document with more matches overall.
+	 * tokens found in the best section; ties go to the document with more matches overall. Two-letter
+	 * query words are searched only if whitelisted ("CI", "MR") and must match exactly.
 	 */
 	public List<SearchHit> search(String query) {
-		Set<String> queryTokens = tokenize(query);
+		Set<String> queryTokens = queryTokens(query);
 		if (queryTokens.isEmpty()) {
 			return List.of();
 		}
@@ -72,14 +84,14 @@ public class KnowledgeBaseRepository {
 			KnowledgeBaseDocument.Section best = null;
 			int bestScore = 0;
 			for (KnowledgeBaseDocument.Section section : doc.sections()) {
-				int score = countMatches(queryTokens, tokenize(section.heading() + " " + section.text()));
+				int score = countMatches(queryTokens, documentTokens(section.heading() + " " + section.text()));
 				if (score > bestScore) {
 					best = section;
 					bestScore = score;
 				}
 			}
 			if (best != null) {
-				int documentScore = countMatches(queryTokens, tokenize(doc.title() + " " + doc.body()));
+				int documentScore = countMatches(queryTokens, documentTokens(doc.title() + " " + doc.body()));
 				ranked.add(new Ranked(new SearchHit(doc.file(), doc.title(), excerpt(best.text()), bestScore),
 						documentScore));
 			}
@@ -153,20 +165,32 @@ public class KnowledgeBaseRepository {
 		return doc.sections().isEmpty() ? "" : excerpt(doc.sections().getFirst().text().split("\n\n")[0]);
 	}
 
-	private static Set<String> tokenize(String text) {
+	private static Set<String> documentTokens(String text) {
+		return Set.copyOf(words(text));
+	}
+
+	private static Set<String> queryTokens(String query) {
+		return words(query).stream()
+				.filter(word -> word.length() >= MIN_PREFIX_MATCH_LENGTH || TWO_LETTER_WHITELIST.contains(word))
+				.collect(Collectors.toSet());
+	}
+
+	/** Lowercase words with diacritics removed. */
+	private static List<String> words(String text) {
 		if (text == null) {
-			return Set.of();
+			return List.of();
 		}
-		String normalized = DIACRITICS.matcher(Normalizer.normalize(text.toLowerCase(), Normalizer.Form.NFD))
+		String normalized = DIACRITICS.matcher(Normalizer.normalize(text.toLowerCase(Locale.ROOT), Normalizer.Form.NFD))
 				.replaceAll("");
 		return Arrays.stream(NON_LETTERS.split(normalized))
-				.filter(token -> token.length() >= MIN_TOKEN_LENGTH)
-				.collect(Collectors.toSet());
+				.filter(word -> word.length() >= MIN_TOKEN_LENGTH)
+				.toList();
 	}
 
 	private static int countMatches(Set<String> queryTokens, Set<String> documentTokens) {
 		return (int) queryTokens.stream()
-				.filter(q -> documentTokens.stream().anyMatch(d -> d.startsWith(q)))
+				.filter(q -> q.length() < MIN_PREFIX_MATCH_LENGTH ? documentTokens.contains(q)
+						: documentTokens.stream().anyMatch(d -> d.startsWith(q)))
 				.count();
 	}
 

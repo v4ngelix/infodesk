@@ -77,6 +77,20 @@ class KnowledgeBaseRepositoryTest {
 	}
 
 	@Test
+	void searchFindsTwoLetterAcronyms() {
+		assertThat(repository.search("CI/CD")).first().extracting(SearchHit::file).isEqualTo("cicd-pipeline.md");
+		assertThat(repository.search("ci/cd")).first().extracting(SearchHit::file).isEqualTo("cicd-pipeline.md");
+	}
+
+	@Test
+	void searchIgnoresTwoLetterWordsNotOnWhitelistInAnyCase() {
+		assertThat(repository.search("ja on ei")).isEmpty();
+		assertThat(repository.search("JA ON EI")).isEmpty();
+		assertThat(repository.search("KU ku")).isEmpty();
+		assertThat(repository.search("ja kubernetes ON")).isEqualTo(repository.search("kubernetes"));
+	}
+
+	@Test
 	void getRejectsPathTraversalAndUnknownNames() {
 		assertThat(repository.get("../../../etc/passwd")).isEmpty();
 		assertThat(repository.get("/etc/passwd")).isEmpty();
