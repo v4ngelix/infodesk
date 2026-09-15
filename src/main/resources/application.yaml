@@ -17,5 +17,6 @@ spring:
       moderation: none
 infodesk:
   max-question-length: 2000
+  memory-window: 10
   rate-limit:
     requests-per-minute: 10
