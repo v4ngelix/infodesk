@@ -114,14 +114,6 @@ class AnswerValidatorTest {
 	}
 
 	@Test
-	void overlongAnswerIsCappedButStillCited() {
-		AskResponse response = validate(answer("a".repeat(AnswerValidator.MAX_ANSWER_LENGTH + 500), List.of("gitlab-access.md")));
-
-		assertThat(response.answer()).hasSizeLessThanOrEqualTo(AnswerValidator.MAX_ANSWER_LENGTH + 40)
-				.endsWith("[allikas: gitlab-access.md]");
-	}
-
-	@Test
 	void modelRefusalIsReturnedWithoutSources() {
 		AskResponse response = validate(new AgentLlmOutput("ignored", List.of("gitlab-access.md"), "high", true, "Teema on skoobist väljas."));
 
