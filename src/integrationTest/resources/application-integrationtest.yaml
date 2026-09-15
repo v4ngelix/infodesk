@@ -3,3 +3,6 @@ spring:
     openai:
       chat:
         temperature: 0
+infodesk:
+  rate-limit:
+    requests-per-minute: 1000

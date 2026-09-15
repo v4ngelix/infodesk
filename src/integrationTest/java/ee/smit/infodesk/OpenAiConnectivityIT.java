@@ -36,7 +36,7 @@ class OpenAiConnectivityIT {
 
 	@Test
 	void reachesConfiguredOpenAiModel() {
-		String answer = chatModel.call("Vasta tapselt uhe sonaga: pong");
+		String answer = chatModel.call("Reply with exactly one word, unchanged: pong");
 
 		assertThat(answer).isNotBlank();
 		assertThat(answer.toLowerCase()).contains("pong");
