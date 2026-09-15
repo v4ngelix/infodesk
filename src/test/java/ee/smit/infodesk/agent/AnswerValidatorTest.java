@@ -12,7 +12,6 @@ import ee.smit.infodesk.api.AskResponse;
 import ee.smit.infodesk.api.SourceDto;
 import ee.smit.infodesk.knowledgebase.KnowledgeBaseRepository;
 
-/** Application-level source enforcement (task §4 "Soovitus", §5.3). */
 class AnswerValidatorTest {
 
 	private static final String QUESTION = "Kuidas taotleda ligipääsu GitLabile?";

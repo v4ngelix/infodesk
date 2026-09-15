@@ -14,7 +14,6 @@ import org.springframework.web.client.RestClientException;
 
 import com.openai.errors.OpenAIException;
 
-/** Error bodies are {@code {error, details}}; never exposes stack traces or upstream messages. */
 @RestControllerAdvice
 public class ApiExceptionHandler {
 

@@ -13,7 +13,6 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 
-/** Records every prompt the ChatClient sends and answers with canned assistant text, in order. */
 class StubChatModel implements ChatModel {
 
 	final List<Prompt> prompts = new ArrayList<>();
@@ -34,7 +33,6 @@ class StubChatModel implements ChatModel {
 				.build();
 	}
 
-	/** Tool-calling options so that {@code ChatClient} attaches the registered tools to the prompt. */
 	@Override
 	public ChatOptions getOptions() {
 		return ToolCallingChatOptions.builder().build();

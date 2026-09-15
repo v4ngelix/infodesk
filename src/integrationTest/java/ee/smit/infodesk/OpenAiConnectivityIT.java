@@ -8,11 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-/**
- * Smoke test for the OpenAI wiring: the API key resolves from the environment or
- * from a local {@code .env}, and the configured model actually answers.
- * Requires a working key — run via {@code ./gradlew integrationTest}.
- */
 @SpringBootTest
 class OpenAiConnectivityIT {
 

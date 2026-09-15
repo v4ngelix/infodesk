@@ -10,11 +10,6 @@ import ee.smit.infodesk.knowledgebase.KnowledgeBaseRepository;
 import ee.smit.infodesk.knowledgebase.SearchHit;
 import ee.smit.infodesk.knowledgebase.TopicSummary;
 
-/**
- * The only tools the agent may call (allowlist, see {@code ToolAllowlistTest}). Read-only access to the
- * knowledge base; inputs are trimmed and length-capped, and file names that look like paths are refused
- * before the repository is touched.
- */
 @Component
 public class KnowledgeBaseTools {
 

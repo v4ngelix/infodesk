@@ -17,11 +17,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * Per-client sliding-window rate limit on the agent API. In-memory, single instance only.
- * Client = remote address; {@code X-Forwarded-For} is ignored because clients can spoof it.
- * Writes the 429 itself: filters run before {@code @RestControllerAdvice} can see anything.
- */
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
 
@@ -55,7 +50,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
 	private boolean tryAcquire(String client, long now) {
 		boolean[] allowed = new boolean[1];
-		// compute() locks the entry; returning null removes idle clients so the map does not grow forever
 		requestsByClient.compute(client, (key, timestamps) -> {
 			Deque<Long> window = timestamps == null ? new ArrayDeque<>() : timestamps;
 			while (!window.isEmpty() && now - window.peekFirst() >= WINDOW_MILLIS) {

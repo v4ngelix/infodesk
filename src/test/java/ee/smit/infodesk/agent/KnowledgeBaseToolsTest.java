@@ -37,7 +37,6 @@ class KnowledgeBaseToolsTest {
 				.extracting("file").isEqualTo("cicd-pipeline.md");
 	}
 
-	/** SEC-06 */
 	@Test
 	void searchForPathTraversalReturnsNoFilesystemContent() {
 		assertThat(tools.searchKnowledgeBase("../../../etc/passwd"))

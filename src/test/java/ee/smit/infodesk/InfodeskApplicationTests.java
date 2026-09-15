@@ -23,7 +23,6 @@ class InfodeskApplicationTests {
 	void contextLoads() {
 	}
 
-	/** The test profile must shadow any real key from the environment or .env. */
 	@Test
 	void unitTestsNeverUseARealApiKey() {
 		assertThat(apiKey).isEqualTo("test-key-not-used");

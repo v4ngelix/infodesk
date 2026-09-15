@@ -16,16 +16,9 @@ import ee.smit.infodesk.knowledgebase.KnowledgeBaseDocument;
 import ee.smit.infodesk.knowledgebase.KnowledgeBaseRepository;
 import ee.smit.infodesk.knowledgebase.SearchHit;
 
-/**
- * Application-level enforcement of the source rules (task §4, §5.3) on top of what the prompt asks for.
- * The model only names files; this class checks they exist, attaches title and excerpt, guarantees that a
- * non-refused answer has at least one source and a citation, normalizes confidence, caps length and refuses
- * anything that echoes the system prompt (detected by the canary token embedded in it).
- */
 @Component
 public class AnswerValidator {
 
-	/** Must appear verbatim in {@code prompts/system.st}; its presence in an answer means the prompt leaked. */
 	public static final String CANARY = "INFODESK-SYS-7f3a";
 
 	public static final String NO_SOURCE_REASON = "Vastust ei õnnestunud siduda teadmusbaasi allikaga.";
@@ -35,8 +28,6 @@ public class AnswerValidator {
 	static final String UNPARSEABLE_REASON = "Mudeli vastust ei õnnestunud töödelda.";
 
 	static final String DEFAULT_REFUSAL_REASON = "Küsimusele ei saa teadmusbaasi põhjal vastata.";
-
-	static final int MAX_ANSWER_LENGTH = 2000;
 
 	private static final Set<String> CONFIDENCE_LEVELS = Set.of("high", "medium", "low");
 
@@ -66,7 +57,7 @@ public class AnswerValidator {
 			log.info("answer without a verifiable source converted to refusal (files={})", output.sourceFiles());
 			return refusal(NO_SOURCE_REASON, sessionId);
 		}
-		String answer = cite(cap(output.answer().strip()), sources);
+		String answer = cite(output.answer().strip(), sources);
 		return new AskResponse(answer, sources, normalizeConfidence(output.confidence()), false, null, sessionId);
 	}
 
@@ -88,7 +79,6 @@ public class AnswerValidator {
 		return List.copyOf(sources);
 	}
 
-	/** Best matching section for the question; falls back to the document's intro when nothing matched. */
 	private String excerpt(KnowledgeBaseDocument doc, List<SearchHit> hits) {
 		return hits.stream()
 				.filter(hit -> hit.file().equals(doc.file()))
@@ -110,10 +100,6 @@ public class AnswerValidator {
 			}
 		}
 		return cited.toString();
-	}
-
-	private static String cap(String answer) {
-		return answer.length() <= MAX_ANSWER_LENGTH ? answer : answer.substring(0, MAX_ANSWER_LENGTH - 1) + "…";
 	}
 
 	private static String normalizeConfidence(String confidence) {

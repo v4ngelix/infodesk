@@ -16,7 +16,6 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import ee.smit.infodesk.InfodeskApplication;
 import ee.smit.infodesk.knowledgebase.KnowledgeBaseRepository;
 
-/** The agent may only ever call these tools (task §5 allowlist). */
 class ToolAllowlistTest {
 
 	private static final Set<String> ALLOWED_TOOLS = Set.of("listTopics", "searchKnowledgeBase", "getDocument");

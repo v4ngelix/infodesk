@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
-/** API-03: health check returns HTTP 200 without any OpenAI call. */
 @WebMvcTest(HealthController.class)
 @ActiveProfiles("test")
 class HealthControllerTest {

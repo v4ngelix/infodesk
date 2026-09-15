@@ -22,11 +22,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
-/**
- * Read-only knowledge base loaded once from {@code classpath:knowledgebase/*.md}.
- * Documents are only reachable by exact filename lookup in the loaded map — user input is never
- * turned into a path, so traversal like {@code ../../etc/passwd} cannot reach the filesystem.
- */
 @Component
 public class KnowledgeBaseRepository {
 
@@ -36,13 +31,8 @@ public class KnowledgeBaseRepository {
 
 	private static final int MIN_TOKEN_LENGTH = 2;
 
-	/** Query tokens shorter than this must match a document token exactly instead of as a prefix. */
 	private static final int MIN_PREFIX_MATCH_LENGTH = 3;
 
-	/**
-	 * The only two-letter query words that are searched (IT acronyms). Everything else that short is filler
-	 * ("ja", "on") and would match nearly every document. Extend when the knowledge base gains new acronyms.
-	 */
 	private static final Set<String> TWO_LETTER_WHITELIST = Set.of("ci", "cd", "mr", "pr", "qa", "ui", "db", "vm", "ip",
 			"os", "ad");
 
@@ -66,12 +56,6 @@ public class KnowledgeBaseRepository {
 		return file == null ? Optional.empty() : Optional.ofNullable(documents.get(file));
 	}
 
-	/**
-	 * Keyword search. A query token matches a document token that starts with it, so base forms
-	 * match Estonian inflections ("ligipääs" → "ligipääsu"). Score is the number of distinct query
-	 * tokens found in the best section; ties go to the document with more matches overall. Two-letter
-	 * query words are searched only if whitelisted ("CI", "MR") and must match exactly.
-	 */
 	public List<SearchHit> search(String query) {
 		Set<String> queryTokens = queryTokens(query);
 		if (queryTokens.isEmpty()) {
@@ -175,7 +159,6 @@ public class KnowledgeBaseRepository {
 				.collect(Collectors.toSet());
 	}
 
-	/** Lowercase words with diacritics removed. */
 	private static List<String> words(String text) {
 		if (text == null) {
 			return List.of();

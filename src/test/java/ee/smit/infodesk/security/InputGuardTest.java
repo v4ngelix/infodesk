@@ -112,7 +112,6 @@ class InputGuardTest {
 				.doesNotContain("salajane-sisu-123");
 	}
 
-	/** SEC-07 */
 	@Test
 	void tooLongQuestionIsRejected() {
 		assertThat(guard.validate("a".repeat(3000))).isPresent();

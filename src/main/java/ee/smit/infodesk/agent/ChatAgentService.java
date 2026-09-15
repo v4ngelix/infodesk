@@ -23,12 +23,6 @@ import ee.smit.infodesk.api.AskResponse;
 import ee.smit.infodesk.security.GuardResult;
 import ee.smit.infodesk.security.InputGuard;
 
-/**
- * The agent: input guard → Spring AI {@link ChatClient} (system prompt from {@code prompts/system.st}, the
- * {@link KnowledgeBaseTools} allowlist, per-session in-memory chat history) → {@link AnswerValidator}.
- * The system prompt is a separate {@code system} role message; the question is sent only as the {@code user}
- * message and never templated into the prompt. The question text is never logged.
- */
 @Service
 public class ChatAgentService implements AgentService {
 
@@ -61,7 +55,6 @@ public class ChatAgentService implements AgentService {
 	public AskResponse ask(String question, String sessionId) {
 		String session = sessionId == null || sessionId.isBlank() ? UUID.randomUUID().toString() : sessionId;
 
-		// Defence in depth: Bean Validation on AskRequest already rejects these with 400.
 		Optional<String> invalid = inputGuard.validate(question);
 		if (invalid.isPresent()) {
 			return refusal(invalid.get(), session);
@@ -80,7 +73,6 @@ public class ChatAgentService implements AgentService {
 					.entity(AgentLlmOutput.class);
 		}
 		catch (IllegalStateException | JacksonException ex) {
-			// BeanOutputConverter: the model did not return the requested JSON shape.
 			log.warn("model output could not be parsed as {}: {}", AgentLlmOutput.class.getSimpleName(),
 					ex.getClass().getName());
 			output = null;

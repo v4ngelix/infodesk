@@ -2,7 +2,6 @@ package ee.smit.infodesk.agent;
 
 import ee.smit.infodesk.knowledgebase.KnowledgeBaseDocument;
 
-/** Result of the {@code getDocument} tool. Never carries paths or exception messages. */
 public record DocumentResult(boolean found, String file, String title, String body, String message) {
 
 	static final String NOT_FOUND_MESSAGE = "Dokumenti ei leitud";

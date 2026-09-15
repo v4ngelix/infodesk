@@ -11,10 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * Checks user input before it reaches the LLM. Suspicious input is refused as a whole, without an LLM call
- * (see README "Input guard"). Only pattern IDs and input length are logged, never the input itself.
- */
 @Component
 public class InputGuard {
 
@@ -22,7 +18,6 @@ public class InputGuard {
 
 	private static final Logger log = LoggerFactory.getLogger(InputGuard.class);
 
-	/** Written lower-case without diacritics; a literal space matches any whitespace run (so write optional spaces as {@code \\s*}). */
 	private static final List<InjectionPattern> PATTERNS = List.of(
 			InjectionPattern.of("ignore-instructions-en", "ignore (all )?(previous|prior|above) instructions"),
 			InjectionPattern.of("forget-rules-en", "forget (your|all|the) rules"),
@@ -51,7 +46,6 @@ public class InputGuard {
 		this.maxQuestionLength = maxQuestionLength;
 	}
 
-	/** @return rejection reason, empty when the question is acceptable */
 	public Optional<String> validate(String question) {
 		if (question == null || question.isBlank()) {
 			return Optional.of("Küsimus puudub.");

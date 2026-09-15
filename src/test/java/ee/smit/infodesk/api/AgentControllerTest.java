@@ -29,7 +29,6 @@ class AgentControllerTest {
 	@MockitoBean
 	AgentService agentService;
 
-	/** API-01 */
 	@Test
 	void emptyQuestionReturns400() {
 		assertThat(ask("{\"question\": \"\"}"))
@@ -40,14 +39,12 @@ class AgentControllerTest {
 		verifyNoInteractions(agentService);
 	}
 
-	/** API-02 */
 	@Test
 	void missingQuestionReturns400() {
 		assertThat(ask("{\"sessionId\": \"abc\"}")).hasStatus(HttpStatus.BAD_REQUEST);
 		verifyNoInteractions(agentService);
 	}
 
-	/** SEC-07: rejected before the agent (and so the LLM) is ever called. */
 	@Test
 	void tooLongQuestionReturns400WithoutCallingAgent() {
 		assertThat(ask("{\"question\": \"" + "a".repeat(3000) + "\"}")).hasStatus(HttpStatus.BAD_REQUEST);
