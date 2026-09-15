@@ -41,7 +41,9 @@ public class InputGuard {
 			InjectionPattern.of("role-override-not-et", "\\bsa ei ole enam\\b"),
 			InjectionPattern.of("act-as-et", "\\bkaitu nagu\\b"),
 			InjectionPattern.of("list-tools-et", "\\b(loetle|naita|avalda) .*tooriist"),
-			InjectionPattern.of("reveal-rules-et", "\\b(loetle|naita|avalda|utle) .*oma (reegl|juhis)"));
+			InjectionPattern.of("reveal-rules-et", "\\b(loetle|naita|avalda|utle) .*oma (reegl|juhis)"),
+			InjectionPattern.of("path-traversal", "\\.\\.[/\\\\]|[/\\\\]\\.\\.|~[/\\\\]|%2e%2e"),
+			InjectionPattern.of("system-path", "(^|[^\\w.])/(etc|proc|sys|root|home|var|usr|bin|boot|dev)(/|\\b)|\\b[a-z]:\\\\"));
 
 	private final int maxQuestionLength;
 
