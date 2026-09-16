@@ -149,7 +149,7 @@ public class KnowledgeBaseRepository {
 		}
 	}
 
-	private static String summary(KnowledgeBaseDocument doc) {
+	public String summary(KnowledgeBaseDocument doc) {
 		return doc.sections().isEmpty() ? "" : excerpt(doc.sections().getFirst().text().split("\n\n")[0]);
 	}
 

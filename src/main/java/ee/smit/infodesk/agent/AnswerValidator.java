@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -84,11 +85,8 @@ public class AnswerValidator {
 				.filter(hit -> hit.file().equals(doc.file()))
 				.map(SearchHit::excerpt)
 				.findFirst()
-				.orElseGet(() -> repository.listTopics().stream()
-						.filter(topic -> topic.file().equals(doc.file()))
-						.map(topic -> topic.summary())
-						.findFirst()
-						.orElse(doc.title()));
+				.or(() -> Optional.of(repository.summary(doc)).filter(summary -> !summary.isBlank()))
+				.orElse(doc.title());
 	}
 
 	private static String cite(String answer, List<SourceDto> sources) {
