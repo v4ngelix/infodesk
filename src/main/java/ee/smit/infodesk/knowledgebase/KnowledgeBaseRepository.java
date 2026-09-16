@@ -75,9 +75,13 @@ public class KnowledgeBaseRepository {
 				}
 			}
 			if (best != null) {
-				int documentScore = countMatches(queryTokens, documentTokens(doc.title() + " " + doc.body()));
-				ranked.add(new Ranked(new SearchHit(doc.file(), doc.title(), excerpt(best.text()), bestScore),
-						documentScore));
+				Set<String> docTokens = documentTokens(doc.title() + " " + doc.body());
+				Map<Boolean, List<String>> terms = queryTokens.stream()
+						.sorted()
+						.collect(Collectors.partitioningBy(q -> matches(q, docTokens)));
+				SearchHit hit = new SearchHit(doc.file(), doc.title(), excerpt(best.text()), bestScore,
+						terms.get(true), terms.get(false));
+				ranked.add(new Ranked(hit, terms.get(true).size()));
 			}
 		}
 		return ranked.stream()
@@ -171,10 +175,12 @@ public class KnowledgeBaseRepository {
 	}
 
 	private static int countMatches(Set<String> queryTokens, Set<String> documentTokens) {
-		return (int) queryTokens.stream()
-				.filter(q -> q.length() < MIN_PREFIX_MATCH_LENGTH ? documentTokens.contains(q)
-						: documentTokens.stream().anyMatch(d -> d.startsWith(q)))
-				.count();
+		return (int) queryTokens.stream().filter(q -> matches(q, documentTokens)).count();
+	}
+
+	private static boolean matches(String queryToken, Set<String> documentTokens) {
+		return queryToken.length() < MIN_PREFIX_MATCH_LENGTH ? documentTokens.contains(queryToken)
+				: documentTokens.stream().anyMatch(d -> d.startsWith(queryToken));
 	}
 
 	private static String excerpt(String text) {

@@ -42,6 +42,17 @@ class KnowledgeBaseRepositoryTest {
 	}
 
 	@Test
+	void searchReportsMatchedAndUnmatchedTerms() {
+		SearchHit hit = repository.search("marsi serveri ligipääs").stream()
+				.filter(h -> h.file().equals("gitlab-access.md"))
+				.findFirst()
+				.orElseThrow();
+
+		assertThat(hit.matchedTerms()).containsExactly("ligipaas");
+		assertThat(hit.unmatchedTerms()).containsExactly("marsi", "serveri");
+	}
+
+	@Test
 	void searchIsCaseAndDiacriticInsensitive() {
 		assertThat(repository.search("GITLAB LIGIPAAS")).first()
 				.extracting(SearchHit::file).isEqualTo("gitlab-access.md");

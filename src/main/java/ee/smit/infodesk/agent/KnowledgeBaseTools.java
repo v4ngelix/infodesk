@@ -28,7 +28,8 @@ public class KnowledgeBaseTools {
 		return repository.listTopics();
 	}
 
-	@Tool(description = "Otsib teadmusbaasist märksõnade järgi. Tagastab kuni 3 parimat vastet (fail, pealkiri, väljavõte).")
+	@Tool(description = "Otsib teadmusbaasist märksõnade järgi. Tagastab kuni 3 parimat vastet (fail, pealkiri, väljavõte, "
+			+ "matchedTerms: dokumendis leidunud otsingusõnad, unmatchedTerms: dokumendis puuduvad otsingusõnad).")
 	public List<SearchHit> searchKnowledgeBase(@ToolParam(description = "Otsingusõnad") String query) {
 		if (query == null) {
 			return List.of();

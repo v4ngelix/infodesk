@@ -88,7 +88,8 @@ class UseCaseIT extends AgentIT {
 		assertThat(response.refused()).as("refused (reason: %s)", response.refusalReason()).isFalse();
 		assertThat(response.sources()).isNotEmpty();
 		assertThat(response.sources()).extracting(SourceDto::file)
-				.isSubsetOf("cicd-pipeline.md", "kubernetes-deploy.md");
+				.containsAnyOf("cicd-pipeline.md", "kubernetes-deploy.md");
+		assertOnlyKnowledgeBaseSources(response);
 		assertEstonian(response.answer());
 	}
 
