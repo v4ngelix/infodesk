@@ -44,7 +44,7 @@ public class AnswerValidator {
 		if (output == null) {
 			return refusal(UNPARSEABLE_REASON, sessionId);
 		}
-		if (contains(output.answer(), CANARY) || contains(output.refusalReason(), CANARY)) {
+		if (containsCanary(output.answer()) || containsCanary(output.refusalReason())) {
 			log.warn("model output contained the system prompt canary; refusing");
 			return refusal(LEAK_REASON, sessionId);
 		}
@@ -108,8 +108,8 @@ public class AnswerValidator {
 		return CONFIDENCE_LEVELS.contains(normalized) ? normalized : "low";
 	}
 
-	private static boolean contains(String text, String token) {
-		return text != null && text.contains(token);
+	private static boolean containsCanary(String text) {
+		return text != null && text.contains(CANARY);
 	}
 
 	private static AskResponse refusal(String reason, String sessionId) {

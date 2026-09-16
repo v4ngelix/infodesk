@@ -34,7 +34,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorResponse malformedBody(HttpMessageNotReadableException e) {
+	public ErrorResponse malformedBody() {
 		return new ErrorResponse("Malformed request body", List.of("Request body must be valid JSON."));
 	}
 

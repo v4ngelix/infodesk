@@ -19,9 +19,8 @@ class StubChatModel implements ChatModel {
 
 	private final Deque<String> replies = new ArrayDeque<>();
 
-	StubChatModel reply(String... texts) {
+	void reply(String... texts) {
 		replies.addAll(List.of(texts));
-		return this;
 	}
 
 	@Override

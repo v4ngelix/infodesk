@@ -2,6 +2,7 @@ package ee.boheemia.infodesk.agent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ class ToolAllowlistTest {
 	void knowledgeBaseToolsDeclaresExactlyTheAllowedToolMethods() {
 		Set<String> toolMethods = Arrays.stream(KnowledgeBaseTools.class.getDeclaredMethods())
 				.filter(method -> method.isAnnotationPresent(Tool.class))
-				.map(method -> method.getName())
+				.map(Method::getName)
 				.collect(Collectors.toSet());
 
 		assertThat(toolMethods).isEqualTo(ALLOWED_TOOLS);

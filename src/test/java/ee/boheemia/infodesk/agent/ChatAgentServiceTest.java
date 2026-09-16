@@ -94,7 +94,8 @@ class ChatAgentServiceTest {
 		assertThat(prompt.getSystemMessage().getText()).contains(AnswerValidator.CANARY);
 		assertThat(prompt.getUserMessage().getText()).startsWith("Kuidas taotleda ligipääsu GitLabile?");
 		assertThat(prompt.getSystemMessage().getText()).doesNotContain("Kuidas taotleda");
-		assertThat(((ToolCallingChatOptions) prompt.getOptions()).getToolCallbacks())
+        assert prompt.getOptions() != null;
+        assertThat(((ToolCallingChatOptions) prompt.getOptions()).getToolCallbacks())
 				.extracting(callback -> callback.getToolDefinition().name())
 				.containsExactlyInAnyOrder("listTopics", "searchKnowledgeBase", "getDocument");
 	}
@@ -148,7 +149,8 @@ class ChatAgentServiceTest {
 
 		service.ask("Kuidas taotleda ligipääsu GitLabile?", "s-1");
 
-		List<ToolCallback> callbacks = ((ToolCallingChatOptions) model.prompts.getFirst().getOptions()).getToolCallbacks();
+        assert model.prompts.getFirst().getOptions() != null;
+        List<ToolCallback> callbacks = ((ToolCallingChatOptions) model.prompts.getFirst().getOptions()).getToolCallbacks();
 		assertThat(callbacks).hasSize(3);
 	}
 
