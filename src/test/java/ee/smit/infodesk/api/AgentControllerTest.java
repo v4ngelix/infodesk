@@ -18,7 +18,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.web.client.ResourceAccessException;
 
-import ee.smit.infodesk.agent.AgentService;
+import ee.smit.infodesk.agent.ChatAgentService;
 
 @WebMvcTest(AgentController.class)
 @ActiveProfiles("test")
@@ -28,7 +28,7 @@ class AgentControllerTest {
 	MockMvcTester mvc;
 
 	@MockitoBean
-	AgentService agentService;
+	ChatAgentService agentService;
 
 	@Test
 	@DisplayName("API-01 Tühi küsimus")

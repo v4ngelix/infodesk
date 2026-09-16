@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
-import ee.smit.infodesk.agent.AgentService;
+import ee.smit.infodesk.agent.ChatAgentService;
 import ee.smit.infodesk.api.AgentController;
 import ee.smit.infodesk.api.AskResponse;
 import ee.smit.infodesk.health.HealthController;
@@ -29,7 +29,7 @@ class RateLimitFilterTest {
 	MockMvcTester mvc;
 
 	@MockitoBean
-	AgentService agentService;
+	ChatAgentService agentService;
 
 	@Test
 	void eleventhRequestInAMinuteReturns429() {

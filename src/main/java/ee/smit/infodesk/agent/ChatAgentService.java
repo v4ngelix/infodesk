@@ -24,7 +24,7 @@ import ee.smit.infodesk.security.GuardResult;
 import ee.smit.infodesk.security.InputGuard;
 
 @Service
-public class ChatAgentService implements AgentService {
+public class ChatAgentService {
 
 	private static final Logger log = LoggerFactory.getLogger(ChatAgentService.class);
 
@@ -51,7 +51,6 @@ public class ChatAgentService implements AgentService {
 				.build();
 	}
 
-	@Override
 	public AskResponse ask(String question, String sessionId) {
 		String session = sessionId == null || sessionId.isBlank() ? UUID.randomUUID().toString() : sessionId;
 

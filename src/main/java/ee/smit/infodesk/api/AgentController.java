@@ -4,15 +4,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ee.smit.infodesk.agent.AgentService;
+import ee.smit.infodesk.agent.ChatAgentService;
 import jakarta.validation.Valid;
 
 @RestController
 public class AgentController {
 
-	private final AgentService agentService;
+	private final ChatAgentService agentService;
 
-	public AgentController(AgentService agentService) {
+	public AgentController(ChatAgentService agentService) {
 		this.agentService = agentService;
 	}
 
