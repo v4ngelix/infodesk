@@ -56,19 +56,23 @@ public class InputGuard {
 		return Optional.empty();
 	}
 
-	public GuardResult scan(String question) {
-		if (question == null) {
-			return new GuardResult(false, List.of());
-		}
-		String normalized = normalize(question);
-		List<String> matched = PATTERNS.stream()
-				.filter(pattern -> pattern.regex().matcher(normalized).find())
-				.map(InjectionPattern::id)
-				.toList();
+	public boolean isSuspicious(String question) {
+		List<String> matched = matchedPatterns(question);
 		if (!matched.isEmpty()) {
 			log.warn("suspicious input patterns={} len={}", matched, question.length());
 		}
-		return new GuardResult(!matched.isEmpty(), matched);
+		return !matched.isEmpty();
+	}
+
+	List<String> matchedPatterns(String question) {
+		if (question == null) {
+			return List.of();
+		}
+		String normalized = normalize(question);
+		return PATTERNS.stream()
+				.filter(pattern -> pattern.regex().matcher(normalized).find())
+				.map(InjectionPattern::id)
+				.toList();
 	}
 
 	private static String normalize(String input) {

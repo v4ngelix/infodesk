@@ -147,7 +147,7 @@ class SecurityIT extends AgentIT {
 	}
 
 	private AskResponse askPastGuard(String question) {
-		assertThat(inputGuard.scan(question).suspicious()).as("bypass variant must not be flagged by InputGuard").isFalse();
+		assertThat(inputGuard.isSuspicious(question)).as("bypass variant must not be flagged by InputGuard").isFalse();
 		return ask(question);
 	}
 

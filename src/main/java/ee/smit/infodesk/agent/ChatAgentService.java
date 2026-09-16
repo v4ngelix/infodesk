@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import tools.jackson.core.JacksonException;
 
 import ee.smit.infodesk.api.AskResponse;
-import ee.smit.infodesk.security.GuardResult;
 import ee.smit.infodesk.security.InputGuard;
 
 @Service
@@ -58,8 +57,7 @@ public class ChatAgentService {
 		if (invalid.isPresent()) {
 			return refusal(invalid.get(), session);
 		}
-		GuardResult guard = inputGuard.scan(question);
-		if (guard.suspicious()) {
+		if (inputGuard.isSuspicious(question)) {
 			return refusal(InputGuard.REFUSAL_REASON, session);
 		}
 
