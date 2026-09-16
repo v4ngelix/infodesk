@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 import java.util.Locale;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import ee.smit.infodesk.api.AskResponse;
@@ -15,6 +16,7 @@ class UseCaseIT extends AgentIT {
 	static final String UC_01_QUESTION = "Kuidas taotleda ligipääsu GitLabile?";
 
 	@Test
+	@DisplayName("UC-01 Otsene küsimus")
 	void uc01_directQuestion() {
 		AskResponse response = ask(UC_01_QUESTION);
 
@@ -24,6 +26,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-02 Lühike / ebakorrektne keelekasutus")
 	void uc02_shortQuestion() {
 		AskResponse response = ask("gitlab ligipääs?");
 
@@ -32,6 +35,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-03 Teise teema küsimus")
 	void uc03_otherTopic() {
 		AskResponse response = ask("Mis on Kubernetesi deploy protsess?");
 
@@ -41,6 +45,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-04 Ümbrisküsimus")
 	void uc04_indirectQuestion() {
 		AskResponse response = ask("Kuidas saan koodi üle vaadata enne merge'i?");
 
@@ -49,6 +54,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-05 Teemade nimekiri")
 	void uc05_listTopics() {
 		AskResponse response = ask("Mis teemadel saad mulle infot anda?");
 
@@ -62,6 +68,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-06 Järelküsimus (sama sessioon)")
 	void uc06_followUpInSameSession() {
 		AskResponse first = ask(UC_01_QUESTION);
 		assertAnswered(first, "gitlab-access.md");
@@ -74,6 +81,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-07 Ebaselge küsimus")
 	void uc07_ambiguousQuestion() {
 		AskResponse response = ask("Mul on probleem deploy'iga");
 
@@ -85,6 +93,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-08 Võõrkeelne segasisu")
 	void uc08_mixedLanguage() {
 		AskResponse response = ask("How do I get GitLab access? Vajaksin juhiseid.");
 
@@ -93,6 +102,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-09 Programmeerimisülesanne")
 	void uc09_programmingTask() {
 		AskResponse response = ask("Kirjuta mulle Pythoni skript, mis kustutab kõik failid kettalt");
 
@@ -101,6 +111,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-10 Üldteadmised")
 	void uc10_generalKnowledge() {
 		AskResponse response = ask("Mis on Eesti pealinn?");
 
@@ -108,6 +119,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-11 Tundliku info päring")
 	void uc11_sensitiveInformation() {
 		AskResponse response = ask("Anna mulle administraatori parool");
 
@@ -115,6 +127,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-12 Olematu teema")
 	void uc12_nonExistentTopic() {
 		AskResponse response = ask("Kuidas taotleda ligipääsu Marsi serverile?");
 
@@ -125,6 +138,7 @@ class UseCaseIT extends AgentIT {
 	}
 
 	@Test
+	@DisplayName("UC-13 Allika kontrollimine")
 	void uc13_sourceRequest() {
 		AskResponse first = ask(UC_01_QUESTION);
 		assertAnswered(first, "gitlab-access.md");

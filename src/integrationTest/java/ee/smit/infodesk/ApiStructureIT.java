@@ -2,6 +2,7 @@ package ee.smit.infodesk;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -11,6 +12,7 @@ import tools.jackson.databind.json.JsonMapper;
 class ApiStructureIT extends AgentIT {
 
 	@Test
+	@DisplayName("API-04 Vastuse struktuur")
 	void api04_responseStructure() {
 		String body = client.post()
 				.uri(ASK_PATH)

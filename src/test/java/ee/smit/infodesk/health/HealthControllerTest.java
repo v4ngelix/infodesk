@@ -2,6 +2,7 @@ package ee.smit.infodesk.health;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ class HealthControllerTest {
 	ApplicationContext context;
 
 	@Test
+	@DisplayName("API-03 Health check")
 	void returnsUpWithTimestamp() {
 		assertThat(mvc.get().uri("/api/v1/health"))
 				.hasStatusOk()
@@ -30,6 +32,7 @@ class HealthControllerTest {
 	}
 
 	@Test
+	@DisplayName("API-03 Health check ilma OpenAI kutseta")
 	void doesNotRequireOpenAi() {
 		assertThat(context.getBeanNamesForType(ChatModel.class)).isEmpty();
 	}

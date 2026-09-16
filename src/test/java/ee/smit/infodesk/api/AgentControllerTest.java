@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -30,6 +31,7 @@ class AgentControllerTest {
 	AgentService agentService;
 
 	@Test
+	@DisplayName("API-01 Tühi küsimus")
 	void emptyQuestionReturns400() {
 		assertThat(ask("{\"question\": \"\"}"))
 				.hasStatus(HttpStatus.BAD_REQUEST)
@@ -40,12 +42,14 @@ class AgentControllerTest {
 	}
 
 	@Test
+	@DisplayName("API-02 Puuduv väli")
 	void missingQuestionReturns400() {
 		assertThat(ask("{\"sessionId\": \"abc\"}")).hasStatus(HttpStatus.BAD_REQUEST);
 		verifyNoInteractions(agentService);
 	}
 
 	@Test
+	@DisplayName("SEC-07 Liiga pikk sisend")
 	void tooLongQuestionReturns400WithoutCallingAgent() {
 		assertThat(ask("{\"question\": \"" + "a".repeat(3000) + "\"}")).hasStatus(HttpStatus.BAD_REQUEST);
 		verifyNoInteractions(agentService);
