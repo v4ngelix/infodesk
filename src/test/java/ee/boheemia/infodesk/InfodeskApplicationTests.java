@@ -20,10 +20,6 @@ class InfodeskApplicationTests {
 	String apiKey;
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void unitTestsNeverUseARealApiKey() {
 		assertThat(apiKey).isEqualTo("test-key-not-used");
 	}
