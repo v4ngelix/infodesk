@@ -51,6 +51,9 @@ Rakendusel on kahte tüüpi teste, mida saab lokaalselt käivitada järgnevalt:
 ./gradlew test             # Üksuste testid - Toimivad ka OpenAI võtmeta.
 ./gradlew integrationTest  # Integratsiooni testid - Eeldab OpenAI võtit.
 ```
+Testide raportid tekivad lokaalselt kausta `build/reports/tests/`:
+- `build/reports/tests/test/index.html` – üksuste testid
+- `build/reports/tests/integrationTest/index.html` – integratsiooni testid
 
 ## CI
 Lähtekoodihoidlal on olemas Github Actions workflow fail `.github/workflows/tests.yml`.
