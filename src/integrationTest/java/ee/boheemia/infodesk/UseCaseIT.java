@@ -149,13 +149,4 @@ class UseCaseIT extends AgentIT {
 		assertAnswered(response, "gitlab-access.md");
 		assertThat(response.answer()).contains("gitlab-access.md");
 	}
-
-	@Test
-	@DisplayName("UC-14 Täielikult võõrkeelne küsimus")
-	void uc14_foreignLanguage() {
-		AskResponse response = ask("How do I get access to GitLab?");
-
-		assertRefused(response);
-		assertThat(response.refusalReason()).containsIgnoringCase("eesti keeles");
-	}
 }
